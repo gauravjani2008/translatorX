@@ -1,463 +1,617 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TranslateX — MXLIFF Translator powered by Gemini</title>
-  <meta name="description" content="Upload your MXLIFF file and translate it using Google Gemini AI. Preserve all inline tags, select domain, and download the bilingual file."/>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <meta name="description"
+    content="Upload your MXLIFF file and translate it using Google Gemini AI. Preserve all inline tags, select domain, and download the bilingual file." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
+
 <body>
 
-<!-- ════════════════════════════════════════
+  <!-- ════════════════════════════════════════
      HEADER
 ════════════════════════════════════════ -->
-<header class="app-header">
-  <div class="header-brand">
-    <div class="brand-icon">✦</div>
-    <span class="brand-name">TranslateX</span>
-    <span class="brand-tag">Gemini Powered</span>
-  </div>
-  <div class="header-actions">
-    <button class="btn btn-ghost btn-sm" id="btn-go-translator" style="display:none">← Translator</button>
-    <button class="btn btn-secondary btn-sm" id="btn-go-admin">⚙️ Admin</button>
-  </div>
-</header>
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-icon">✦</div>
+      <span class="brand-name">TranslateX</span>
+      <span class="brand-tag">Gemini Powered</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btn-go-translator" style="display:none">← Translator</button>
+      <button class="btn btn-secondary btn-sm" id="btn-go-admin">⚙️ Admin</button>
+    </div>
+  </header>
 
-<!-- ════════════════════════════════════════
+  <!-- ════════════════════════════════════════
      MAIN BODY
 ════════════════════════════════════════ -->
-<main class="app-body">
+  <main class="app-body">
 
-  <!-- ── TRANSLATOR VIEW ── -->
-  <div class="view active" id="view-translator">
+    <!-- ── TRANSLATOR VIEW ── -->
+    <div class="view active" id="view-translator">
 
-    <!-- Step Progress Bar -->
-    <nav class="step-progress" aria-label="Steps">
-      <div class="step-item active">
-        <div class="step-num">1</div>
-        <span class="step-label">Upload</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">2</div>
-        <span class="step-label">Languages</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <span class="step-label">Domain</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">4</div>
-        <span class="step-label">Model</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">5</div>
-        <span class="step-label">API Key</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">6</div>
-        <span class="step-label">Instructions</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">7</div>
-        <span class="step-label">Review Prompt</span>
-      </div>
-      <div class="step-sep"></div>
-      <div class="step-item">
-        <div class="step-num">8</div>
-        <span class="step-label">Translate</span>
-      </div>
-    </nav>
-
-    <!-- ── STEP 1 — FILE UPLOAD ── -->
-    <div class="card active-card" id="section-upload">
-      <div class="card-header">
-        <div class="card-num">1</div>
-        <div>
-          <div class="card-title">Upload MXLIFF File</div>
-          <div class="card-desc">Supports .mxliff, .xliff, and .xlf files. Tags are preserved automatically.</div>
+      <!-- Step Progress Bar -->
+      <nav class="step-progress" aria-label="Steps">
+        <div class="step-item active">
+          <div class="step-num">1</div>
+          <span class="step-label">Upload</span>
         </div>
-        <span id="seg-count-badge" class="status-badge done" style="display:none;margin-left:auto;"></span>
-      </div>
-
-      <div class="upload-zone" id="upload-zone">
-        <input type="file" id="file-input" accept=".mxliff,.xliff,.xlf" aria-label="Upload MXLIFF file"/>
-        <span class="upload-icon">📂</span>
-        <h3>Drag & drop your file here</h3>
-        <p>or click to browse &nbsp;·&nbsp; .mxliff &nbsp;·&nbsp; .xliff &nbsp;·&nbsp; .xlf</p>
-      </div>
-
-      <div class="file-info" id="file-info">
-        <span class="file-info-icon">📄</span>
-        <span class="file-info-name" id="file-info-name">—</span>
-        <span class="file-info-meta" id="file-info-meta">—</span>
-      </div>
-
-      <div id="upload-alert" style="margin-top:.75rem"></div>
-
-      <p style="margin-top:.85rem;font-size:.78rem;">
-        💡 Don't have a file? Try the <a href="sample.mxliff" download style="color:var(--accent)">sample.mxliff</a> included with this app.
-      </p>
-    </div>
-
-    <!-- ── STEP 2 — LANGUAGES ── -->
-    <div class="card" id="section-language">
-      <div class="card-header">
-        <div class="card-num">2</div>
-        <div>
-          <div class="card-title">Language Pair</div>
-          <div class="card-desc">Source and target languages. Auto-detected from file when possible.</div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <span class="step-label">Languages</span>
         </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <span class="step-label">Domain</span>
+        </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <span class="step-label">Model</span>
+        </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <span class="step-label">API Key</span>
+        </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <span class="step-label">Instructions</span>
+        </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">7</div>
+          <span class="step-label">Review Prompt</span>
+        </div>
+        <div class="step-sep"></div>
+        <div class="step-item">
+          <div class="step-num">8</div>
+          <span class="step-label">Translate</span>
+        </div>
+      </nav>
+
+      <!-- ── STEP 1 — FILE UPLOAD ── -->
+      <div class="card active-card" id="section-upload">
+        <div class="card-header">
+          <div class="card-num">1</div>
+          <div>
+            <div class="card-title">Upload MXLIFF File</div>
+            <div class="card-desc">Supports .mxliff, .xliff, and .xlf files. Tags are preserved automatically.</div>
+          </div>
+          <span id="seg-count-badge" class="status-badge done" style="display:none;margin-left:auto;"></span>
+        </div>
+
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept=".mxliff,.xliff,.xlf" aria-label="Upload MXLIFF file" />
+          <span class="upload-icon">📂</span>
+          <h3>Drag & drop your file here</h3>
+          <p>or click to browse &nbsp;·&nbsp; .mxliff &nbsp;·&nbsp; .xliff &nbsp;·&nbsp; .xlf</p>
+        </div>
+
+        <div class="file-info" id="file-info">
+          <span class="file-info-icon">📄</span>
+          <span class="file-info-name" id="file-info-name">—</span>
+          <span class="file-info-meta" id="file-info-meta">—</span>
+        </div>
+
+        <div id="upload-alert" style="margin-top:.75rem"></div>
+
+        <p style="margin-top:.85rem;font-size:.78rem;">
+          💡 Don't have a file? Try the <a href="sample.mxliff" download style="color:var(--accent)">sample.mxliff</a>
+          included with this app.
+        </p>
       </div>
 
-      <div class="lang-pair-row">
-        <div class="form-group">
-          <label class="form-label" for="source-lang">Source Language <span class="req">*</span></label>
-          <select class="form-control" id="source-lang" aria-label="Source language"></select>
+      <!-- ── STEP 2 — LANGUAGES ── -->
+      <div class="card" id="section-language">
+        <div class="card-header">
+          <div class="card-num">2</div>
+          <div>
+            <div class="card-title">Language Pair</div>
+            <div class="card-desc">Source and target languages. Auto-detected from file when possible.</div>
+          </div>
         </div>
-        <button class="swap-btn" id="swap-langs" aria-label="Swap languages" data-tip="Swap languages">⇄</button>
-        <div class="form-group">
-          <label class="form-label" for="target-lang">Target Language <span class="req">*</span></label>
-          <select class="form-control" id="target-lang" aria-label="Target language"></select>
-        </div>
-      </div>
-    </div>
 
-    <!-- ── STEP 3 — DOMAIN ── -->
-    <div class="card" id="section-domain">
-      <div class="card-header">
-        <div class="card-num">3</div>
-        <div>
-          <div class="card-title">Translation Domain</div>
-          <div class="card-desc">Helps Gemini apply the right terminology and register for your content type.</div>
+        <div class="lang-pair-row">
+          <div class="form-group">
+            <label class="form-label" for="source-lang">Source Language <span class="req">*</span></label>
+            <select class="form-control" id="source-lang" aria-label="Source language"></select>
+          </div>
+          <button class="swap-btn" id="swap-langs" aria-label="Swap languages" data-tip="Swap languages">⇄</button>
+          <div class="form-group">
+            <label class="form-label" for="target-lang">Target Language <span class="req">*</span></label>
+            <select class="form-control" id="target-lang" aria-label="Target language"></select>
+          </div>
         </div>
       </div>
-      <div class="domain-grid" id="domain-grid">
-        <!-- Populated by JS -->
-      </div>
-    </div>
 
-    <!-- ── STEP 4 — MODEL ── -->
-    <div class="card" id="section-model">
-      <div class="card-header">
-        <div class="card-num">4</div>
-        <div>
-          <div class="card-title">Gemini Model</div>
-          <div class="card-desc">Select the model. Gemini 2.5 Pro gives the best quality; Flash models are faster and cheaper.</div>
+      <!-- ── STEP 3 — DOMAIN ── -->
+      <div class="card" id="section-domain">
+        <div class="card-header">
+          <div class="card-num">3</div>
+          <div>
+            <div class="card-title">Translation Domain</div>
+            <div class="card-desc">Helps Gemini apply the right terminology and register for your content type.</div>
+          </div>
         </div>
-      </div>
-      <div class="form-group" style="max-width:380px">
-        <label class="form-label" for="model-select">Model <span class="req">*</span></label>
-        <select class="form-control" id="model-select" aria-label="Gemini model selection">
+        <div class="domain-grid" id="domain-grid">
           <!-- Populated by JS -->
-        </select>
-      </div>
-    </div>
-
-    <!-- ── STEP 5 — API KEY ── -->
-    <div class="card" id="section-apikey">
-      <div class="card-header">
-        <div class="card-num">5</div>
-        <div>
-          <div class="card-title">Gemini API Key</div>
-          <div class="card-desc">Your key is used only in this browser session — never stored or sent to any server.</div>
         </div>
       </div>
-      <div class="form-group" style="max-width:460px">
-        <label class="form-label" for="api-key-input">API Key <span class="req">*</span></label>
-        <div class="api-key-wrapper">
-          <input type="password" class="form-control" id="api-key-input"
-                 placeholder="AIza…" autocomplete="off" aria-label="Gemini API key"/>
-          <button class="api-key-toggle" id="api-key-toggle" type="button" aria-label="Toggle visibility">👁</button>
-        </div>
-        <span class="form-hint">Get your key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent)">aistudio.google.com</a></span>
-      </div>
-    </div>
 
-    <!-- ── STEP 6 — INSTRUCTIONS ── -->
-    <div class="card" id="section-instructions">
-      <div class="card-header">
-        <div class="card-num">6</div>
-        <div>
-          <div class="card-title">Translation Instructions</div>
-          <div class="card-desc">Add any specific guidelines for the translator — tone, style, terminology preferences, etc.</div>
+      <!-- ── STEP 4 — MODEL ── -->
+      <div class="card" id="section-model">
+        <div class="card-header">
+          <div class="card-num">4</div>
+          <div>
+            <div class="card-title">Gemini Model</div>
+            <div class="card-desc">Select the model. Gemini 2.5 Pro gives the best quality; Flash models are faster and
+              cheaper.</div>
+          </div>
+        </div>
+        <div class="form-group" style="max-width:380px">
+          <label class="form-label" for="model-select">Model <span class="req">*</span></label>
+          <select class="form-control" id="model-select" aria-label="Gemini model selection">
+            <!-- Populated by JS -->
+          </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="instructions-input">Custom Instructions</label>
-        <textarea class="form-control" id="instructions-input" rows="4"
-                  placeholder="e.g. Use formal/polite tone. Translate product names phonetically. Keep legal terms in English where no equivalent exists…"
-                  aria-label="Translation instructions"></textarea>
-        <span class="form-hint">These instructions will be embedded into the Gemini prompt to guide translation quality.</span>
-      </div>
-      <div style="margin-top:.75rem">
-        <button class="btn btn-secondary" id="gen-prompt-btn">🔄 Generate / Refresh Prompt</button>
-      </div>
-    </div>
 
-    <!-- ── STEP 7 — PROMPT REVIEW ── -->
-    <div class="card" id="section-prompt">
-      <div class="card-header">
-        <div class="card-num">7</div>
-        <div>
-          <div class="card-title">Review Generated Prompt</div>
-          <div class="card-desc">This prompt is sent to Gemini. It encodes your domain, language pair, instructions, and anti-hallucination rules. Preview uses first 3 segments.</div>
+      <!-- ── STEP 5 — API KEY ── -->
+      <div class="card" id="section-apikey">
+        <div class="card-header">
+          <div class="card-num">5</div>
+          <div>
+            <div class="card-title">Gemini API Key</div>
+            <div class="card-desc">Your key is used only in this browser session — never stored or sent to any server.
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="max-width:460px">
+          <label class="form-label" for="api-key-input">API Key <span class="req">*</span></label>
+          <div class="api-key-wrapper">
+            <input type="password" class="form-control" id="api-key-input" placeholder="AIza…" autocomplete="off"
+              aria-label="Gemini API key" />
+            <button class="api-key-toggle" id="api-key-toggle" type="button" aria-label="Toggle visibility">👁</button>
+          </div>
+          <span class="form-hint">Get your key at <a href="https://aistudio.google.com/app/apikey" target="_blank"
+              style="color:var(--accent)">aistudio.google.com</a></span>
         </div>
       </div>
-      <div class="prompt-preview">
-        <button class="prompt-copy-btn" id="copy-prompt-btn">📋 Copy</button>
-        <pre id="prompt-text">Upload a file and configure settings to generate the prompt…</pre>
-      </div>
-      <div class="alert alert-info" style="margin-top:.75rem">
-        ℹ️ <strong>Tag Placeholders:</strong> Inline tags (Memsource tags like &lt;g&gt;, &lt;x/&gt;, &lt;ph&gt;, etc.) are replaced with <code>⟦TAG1⟧</code> placeholders before sending to Gemini, and restored in the output.
-      </div>
-    </div>
 
-    <!-- ── STEP 8 — TRANSLATE ── -->
-    <div class="card" id="section-translate">
-      <div class="card-header">
-        <div class="card-num">8</div>
-        <div>
-          <div class="card-title">Translate</div>
-          <div class="card-desc">Estimate token usage, then click Translate to begin. Progress updates in real time.</div>
-        </div>
-        <span class="status-badge idle" id="translate-status">⏸ Ready</span>
-      </div>
-
-      <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem">
-        <button class="btn btn-secondary" id="estimate-btn">📊 Estimate Tokens</button>
-        <button class="btn btn-primary btn-lg" id="translate-btn">▶ Translate Now</button>
-      </div>
-
-      <!-- Token estimate box -->
-      <div class="token-estimate" id="token-estimate-box" style="display:none">
-        <div class="token-stat">
-          <span class="token-stat-label">INPUT TOKENS</span>
-          <span class="token-stat-value" id="token-input">—</span>
-        </div>
-        <div class="token-divider"></div>
-        <div class="token-stat">
-          <span class="token-stat-label">EST. OUTPUT</span>
-          <span class="token-stat-value" id="token-output">—</span>
-        </div>
-        <div class="token-divider"></div>
-        <div class="token-stat">
-          <span class="token-stat-label">TOTAL</span>
-          <span class="token-stat-value" id="token-total">—</span>
-        </div>
-        <div class="token-divider"></div>
-        <div class="token-stat">
-          <span class="token-stat-label">~COST (USD)</span>
-          <span class="token-stat-value" id="token-cost">—</span>
-        </div>
-        <span class="form-hint" id="token-source" style="margin-left:auto"></span>
-      </div>
-
-      <div id="translate-alert" style="margin-top:.75rem"></div>
-
-      <!-- Progress -->
-      <div class="progress-bar-wrap" style="margin-top:1rem">
-        <div class="progress-bar-fill" id="progress-fill"></div>
-      </div>
-      <div class="progress-info">
-        <span id="progress-label">Waiting…</span>
-        <span id="progress-pct">0%</span>
-      </div>
-
-      <!-- Log -->
-      <div class="log-area" id="translation-log" style="margin-top:.75rem"></div>
-    </div>
-
-    <!-- ── SEGMENT PREVIEW TABLE ── -->
-    <div class="card" id="section-segments" style="display:none" >
-      <div class="card-header">
-        <div class="card-num">👁</div>
-        <div>
-          <div class="card-title">Segment Preview</div>
-          <div class="card-desc">All segments with source text and live translation output.</div>
-        </div>
-      </div>
-      <div class="segment-table-wrap">
-        <table class="segment-table" aria-label="Segments">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th></th>
-              <th>Source</th>
-              <th>Target (Translation)</th>
-            </tr>
-          </thead>
-          <tbody id="segment-tbody">
-            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:1rem">Upload a file to see segments</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── DOWNLOAD ── -->
-    <div class="card" id="download-section" style="display:none">
-      <div class="download-success">
-        <span class="download-icon-big">🎉</span>
-        <h2>Translation Complete!</h2>
-        <p>Your translated MXLIFF file is ready. All inline tags have been preserved.</p>
-        <button class="btn btn-success btn-lg" id="download-btn">⬇ Download Translated File</button>
-      </div>
-    </div>
-
-  </div><!-- /view-translator -->
-
-  <!-- ── ADMIN VIEW ── -->
-  <div class="view" id="view-admin">
-    <div class="admin-header">
-      <div>
-        <h1>Admin Settings</h1>
-        <p>Configure defaults, prompt templates, and domain definitions.</p>
-      </div>
-      <span class="admin-badge">ADMIN</span>
-    </div>
-
-    <div class="admin-tabs" role="tablist">
-      <button class="admin-tab active" data-tab="admin-tab-prompt" role="tab">Prompt Template</button>
-      <button class="admin-tab" data-tab="admin-tab-domains" role="tab">Domains</button>
-      <button class="admin-tab" data-tab="admin-tab-defaults" role="tab">Defaults</button>
-      <button class="admin-tab" data-tab="admin-tab-about" role="tab">About</button>
-    </div>
-
-    <!-- Prompt Template Tab -->
-    <div class="admin-tab-content active card" id="admin-tab-prompt">
-      <h2 style="margin-bottom:.5rem">System Prompt Template</h2>
-      <p style="margin-bottom:1rem">Edit the master prompt sent to Gemini. Changes apply to all future translations in this session. Use <code>__SEGMENTS__</code> as the placeholder for segment JSON when using a custom override.</p>
-      <div class="form-group">
-        <textarea class="form-control" id="admin-prompt-template" rows="18" style="font-family:monospace;font-size:.78rem;line-height:1.6"
-                  aria-label="Admin prompt template"></textarea>
-      </div>
-      <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="AdminPanel.savePromptTemplate()">💾 Save Template</button>
-        <button class="btn btn-secondary" onclick="AdminPanel.resetPromptTemplate()">↩ Reset to Default</button>
-      </div>
-      <div class="alert alert-warn" style="margin-top:1rem">
-        ⚠️ Advanced feature. An incorrect template may break translation output. Always test after changes.
-      </div>
-    </div>
-
-    <!-- Domains Tab -->
-    <div class="admin-tab-content card" id="admin-tab-domains">
-      <h2 style="margin-bottom:.5rem">Domain List</h2>
-      <p style="margin-bottom:1rem">Add or remove translation domains shown to users. Changes apply immediately.</p>
-      <div id="admin-domains-list"></div>
-      <button class="btn btn-secondary btn-sm" style="margin-top:.75rem" onclick="AdminPanel.addDomain()">+ Add Domain</button>
-    </div>
-
-    <!-- Defaults Tab -->
-    <div class="admin-tab-content card" id="admin-tab-defaults">
-      <h2 style="margin-bottom:1rem">Default Settings</h2>
-      <div class="form-grid form-grid-2" style="gap:1rem">
-        <div class="form-group">
-          <label class="form-label" for="admin-model-default">Default Model</label>
-          <select class="form-control" id="admin-model-default" aria-label="Default Gemini model"></select>
-          <button class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="AdminPanel.setDefaultModel()">Apply Default</button>
+      <!-- ── STEP 6 — INSTRUCTIONS ── -->
+      <div class="card" id="section-instructions">
+        <div class="card-header">
+          <div class="card-num">6</div>
+          <div>
+            <div class="card-title">Translation Instructions</div>
+            <div class="card-desc">Add any specific guidelines for the translator — tone, style, terminology
+              preferences, etc.</div>
+          </div>
         </div>
         <div class="form-group">
-          <label class="form-label" for="admin-batch-size">Batch Size (segments per API call)</label>
-          <input type="number" class="form-control" id="admin-batch-size" value="25" min="1" max="100" aria-label="Batch size"/>
-          <button class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="AdminPanel.setBatchSize()">Apply</button>
-          <span class="form-hint">Higher = fewer API calls but larger payloads. Recommended: 20–30.</span>
+          <label class="form-label" for="instructions-input">Custom Instructions</label>
+          <textarea class="form-control" id="instructions-input" rows="4"
+            placeholder="e.g. Use formal/polite tone. Translate product names phonetically. Keep legal terms in English where no equivalent exists…"
+            aria-label="Translation instructions"></textarea>
+          <span class="form-hint">These instructions will be embedded into the Gemini prompt to guide translation
+            quality.</span>
+        </div>
+        <div style="margin-top:.75rem">
+          <button class="btn btn-secondary" id="gen-prompt-btn">🔄 Generate / Refresh Prompt</button>
         </div>
       </div>
-      <hr style="margin:1.25rem 0;border-color:var(--border)"/>
-      <h3 style="margin-bottom:.5rem">Change Admin Password</h3>
-      <p style="font-size:.8rem;margin-bottom:.75rem">Session-only — changes are lost on page reload. To make permanent, update <code>CONFIG.ADMIN_PASSWORD</code> in <code>app.js</code>.</p>
-      <div class="form-grid form-grid-2">
+
+      <!-- ── STEP 7 — PROMPT REVIEW ── -->
+      <div class="card" id="section-prompt">
+        <div class="card-header">
+          <div class="card-num">7</div>
+          <div>
+            <div class="card-title">Review Generated Prompt</div>
+            <div class="card-desc">This prompt is sent to Gemini. It encodes your domain, language pair, instructions,
+              and anti-hallucination rules. Preview uses first 3 segments.</div>
+          </div>
+        </div>
+        <div class="prompt-preview">
+          <button class="prompt-copy-btn" id="copy-prompt-btn">📋 Copy</button>
+          <pre id="prompt-text">Upload a file and configure settings to generate the prompt…</pre>
+        </div>
+        <div class="alert alert-info" style="margin-top:.75rem">
+          ℹ️ <strong>Tag Placeholders:</strong> Inline tags (Memsource tags like &lt;g&gt;, &lt;x/&gt;, &lt;ph&gt;,
+          etc.) are replaced with <code>⟦TAG1⟧</code> placeholders before sending to Gemini, and restored in the output.
+        </div>
+      </div>
+
+      <!-- ── STEP 8 — TRANSLATE ── -->
+      <div class="card" id="section-translate">
+        <div class="card-header">
+          <div class="card-num">8</div>
+          <div>
+            <div class="card-title">Translate</div>
+            <div class="card-desc">Estimate token usage, then click Translate to begin. Progress updates in real time.
+            </div>
+          </div>
+          <span class="status-badge idle" id="translate-status">⏸ Ready</span>
+        </div>
+
+        <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem">
+          <button class="btn btn-secondary" id="estimate-btn">📊 Estimate Tokens</button>
+          <button class="btn btn-primary btn-lg" id="translate-btn">▶ Translate Now</button>
+        </div>
+
+        <!-- Token estimate box -->
+        <div class="token-estimate" id="token-estimate-box" style="display:none">
+          <div class="token-stat">
+            <span class="token-stat-label">INPUT TOKENS</span>
+            <span class="token-stat-value" id="token-input">—</span>
+          </div>
+          <div class="token-divider"></div>
+          <div class="token-stat">
+            <span class="token-stat-label">EST. OUTPUT</span>
+            <span class="token-stat-value" id="token-output">—</span>
+          </div>
+          <div class="token-divider"></div>
+          <div class="token-stat">
+            <span class="token-stat-label">TOTAL</span>
+            <span class="token-stat-value" id="token-total">—</span>
+          </div>
+          <div class="token-divider"></div>
+          <div class="token-stat">
+            <span class="token-stat-label">~COST (USD)</span>
+            <span class="token-stat-value" id="token-cost">—</span>
+          </div>
+          <span class="form-hint" id="token-source" style="margin-left:auto"></span>
+        </div>
+
+        <div id="translate-alert" style="margin-top:.75rem"></div>
+
+        <!-- Progress -->
+        <div class="progress-bar-wrap" style="margin-top:1rem">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-info">
+          <span id="progress-label">Waiting…</span>
+          <span id="progress-pct">0%</span>
+        </div>
+
+        <!-- Log -->
+        <div class="log-area" id="translation-log" style="margin-top:.75rem"></div>
+      </div>
+
+      <!-- ── SEGMENT PREVIEW TABLE ── -->
+      <div class="card" id="section-segments" style="display:none">
+        <div class="card-header">
+          <div class="card-num">👁</div>
+          <div>
+            <div class="card-title">Segment Preview</div>
+            <div class="card-desc">All segments with source text and live translation output.</div>
+          </div>
+        </div>
+        <div class="segment-table-wrap">
+          <table class="segment-table" aria-label="Segments">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th></th>
+                <th>Source</th>
+                <th>Target (Translation)</th>
+              </tr>
+            </thead>
+            <tbody id="segment-tbody">
+              <tr>
+                <td colspan="4" style="text-align:center;color:var(--text-muted);padding:1rem">Upload a file to see
+                  segments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── DOWNLOAD ── -->
+      <div class="card" id="download-section" style="display:none">
+        <div class="download-success">
+          <span class="download-icon-big">🎉</span>
+          <h2>Translation Complete!</h2>
+          <p>Your translated MXLIFF file is ready. All inline tags have been preserved.</p>
+          <button class="btn btn-success btn-lg" id="download-btn">⬇ Download Translated File</button>
+        </div>
+      </div>
+
+    </div><!-- /view-translator -->
+
+    <!-- ── ADMIN VIEW ── -->
+    <div class="view" id="view-admin">
+      <div class="admin-header">
+        <div>
+          <h1>Admin Settings</h1>
+          <p>Configure defaults, prompt templates, and domain definitions.</p>
+        </div>
+        <span class="admin-badge">ADMIN</span>
+      </div>
+
+      <div class="admin-tabs" role="tablist">
+        <button class="admin-tab active" data-tab="admin-tab-prompt" role="tab">Prompt Template</button>
+        <button class="admin-tab" data-tab="admin-tab-domains" role="tab">Domains</button>
+        <button class="admin-tab" data-tab="admin-tab-defaults" role="tab">Defaults</button>
+        <button class="admin-tab" data-tab="admin-tab-about" role="tab">About</button>
+      </div>
+
+      <!-- Prompt Template Tab -->
+      <div class="admin-tab-content active card" id="admin-tab-prompt">
+        <h2 style="margin-bottom:.5rem">System Prompt Template</h2>
+        <p style="margin-bottom:1rem">Edit the master prompt sent to Gemini. Changes apply to all future translations in
+          this session. Use <code>__SEGMENTS__</code> as the placeholder for segment JSON when using a custom override.
+        </p>
         <div class="form-group">
-          <label class="form-label" for="admin-new-pwd">New Password</label>
-          <input type="password" class="form-control" id="admin-new-pwd" placeholder="New password" aria-label="New admin password"/>
+          <textarea class="form-control" id="admin-prompt-template" rows="18"
+            style="font-family:monospace;font-size:.78rem;line-height:1.6"
+            aria-label="Admin prompt template"></textarea>
+        </div>
+        <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="AdminPanel.savePromptTemplate()">💾 Save Template</button>
+          <button class="btn btn-secondary" onclick="AdminPanel.resetPromptTemplate()">↩ Reset to Default</button>
+        </div>
+        <div class="alert alert-warn" style="margin-top:1rem">
+          ⚠️ Advanced feature. An incorrect template may break translation output. Always test after changes.
         </div>
       </div>
-      <button class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="
+
+      <!-- Domains Tab -->
+      <div class="admin-tab-content card" id="admin-tab-domains">
+        <h2 style="margin-bottom:.5rem">Domain List</h2>
+        <p style="margin-bottom:1rem">Add or remove translation domains shown to users. Changes apply immediately.</p>
+        <div id="admin-domains-list"></div>
+        <button class="btn btn-secondary btn-sm" style="margin-top:.75rem" onclick="AdminPanel.addDomain()">+ Add
+          Domain</button>
+      </div>
+
+      <!-- Defaults Tab -->
+      <div class="admin-tab-content card" id="admin-tab-defaults">
+        <h2 style="margin-bottom:1rem">Default Settings</h2>
+        <div class="form-grid form-grid-2" style="gap:1rem">
+          <div class="form-group">
+            <label class="form-label" for="admin-model-default">Default Model</label>
+            <select class="form-control" id="admin-model-default" aria-label="Default Gemini model"></select>
+            <button class="btn btn-secondary btn-sm" style="margin-top:.5rem"
+              onclick="AdminPanel.setDefaultModel()">Apply Default</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="admin-batch-size">Batch Size (segments per API call)</label>
+            <input type="number" class="form-control" id="admin-batch-size" value="25" min="1" max="100"
+              aria-label="Batch size" />
+            <button class="btn btn-secondary btn-sm" style="margin-top:.5rem"
+              onclick="AdminPanel.setBatchSize()">Apply</button>
+            <span class="form-hint">Higher = fewer API calls but larger payloads. Recommended: 20–30.</span>
+          </div>
+        </div>
+        <hr style="margin:1.25rem 0;border-color:var(--border)" />
+        <h3 style="margin-bottom:.5rem">Change Admin Password</h3>
+        <p style="font-size:.8rem;margin-bottom:.75rem">Session-only — changes are lost on page reload. To make
+          permanent, update <code>CONFIG.ADMIN_PASSWORD</code> in <code>app.js</code>.</p>
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="admin-new-pwd">New Password</label>
+            <input type="password" class="form-control" id="admin-new-pwd" placeholder="New password"
+              aria-label="New admin password" />
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="margin-top:.5rem" onclick="
         const p = document.getElementById('admin-new-pwd').value;
         if(p.length >= 6){ CONFIG.ADMIN_PASSWORD = p; alert('Password updated for this session.'); }
         else alert('Password must be at least 6 characters.');
       ">Update Password</button>
-    </div>
-
-    <!-- About Tab -->
-    <div class="admin-tab-content card" id="admin-tab-about">
-      <h2 style="margin-bottom:.75rem">About TranslateX</h2>
-      <table style="width:100%;font-size:.85rem;border-collapse:collapse">
-        <tr><td style="padding:.4rem 0;color:var(--text-secondary);width:160px">Version</td><td style="font-weight:500">1.0.0</td></tr>
-        <tr><td style="padding:.4rem 0;color:var(--text-secondary)">Format support</td><td style="font-weight:500">MXLIFF 1.2, XLIFF 1.2</td></tr>
-        <tr><td style="padding:.4rem 0;color:var(--text-secondary)">Tag types</td><td style="font-weight:500">g, x, bx, ex, ph, mrk, sub, it (all XLIFF inline)</td></tr>
-        <tr><td style="padding:.4rem 0;color:var(--text-secondary)">Backend</td><td style="font-weight:500">None — fully client-side</td></tr>
-        <tr><td style="padding:.4rem 0;color:var(--text-secondary)">API</td><td style="font-weight:500">Google Gemini (generativelanguage.googleapis.com)</td></tr>
-      </table>
-      <div class="alert alert-info" style="margin-top:1rem">
-        ℹ️ <strong>How tag preservation works:</strong> All Memsource/XLIFF inline tags are replaced with <code>⟦TAG1⟧</code> style placeholders before sending to Gemini. After receiving translations, placeholders are swapped back with the original XML tags. The Gemini prompt strictly instructs the model never to modify these placeholders.
       </div>
-      <div class="alert alert-warn" style="margin-top:.75rem">
-        ⚠️ <strong>Anti-hallucination:</strong> Temperature is set to 0.1. The prompt uses explicit zero-hallucination directives. Output is validated against source segment count and tag presence. Always perform a human review before using translations in production.
+
+      <!-- About Tab -->
+      <div class="admin-tab-content card" id="admin-tab-about">
+        <h2 style="margin-bottom:.75rem">About TranslateX</h2>
+        <table style="width:100%;font-size:.85rem;border-collapse:collapse">
+          <tr>
+            <td style="padding:.4rem 0;color:var(--text-secondary);width:160px">Version</td>
+            <td style="font-weight:500">1.0.0</td>
+          </tr>
+          <tr>
+            <td style="padding:.4rem 0;color:var(--text-secondary)">Format support</td>
+            <td style="font-weight:500">MXLIFF 1.2, XLIFF 1.2</td>
+          </tr>
+          <tr>
+            <td style="padding:.4rem 0;color:var(--text-secondary)">Tag types</td>
+            <td style="font-weight:500">g, x, bx, ex, ph, mrk, sub, it (all XLIFF inline)</td>
+          </tr>
+          <tr>
+            <td style="padding:.4rem 0;color:var(--text-secondary)">Backend</td>
+            <td style="font-weight:500">None — fully client-side</td>
+          </tr>
+          <tr>
+            <td style="padding:.4rem 0;color:var(--text-secondary)">API</td>
+            <td style="font-weight:500">Google Gemini (generativelanguage.googleapis.com)</td>
+          </tr>
+        </table>
+        <div class="alert alert-info" style="margin-top:1rem">
+          ℹ️ <strong>How tag preservation works:</strong> All Memsource/XLIFF inline tags are replaced with
+          <code>⟦TAG1⟧</code> style placeholders before sending to Gemini. After receiving translations, placeholders
+          are swapped back with the original XML tags. The Gemini prompt strictly instructs the model never to modify
+          these placeholders.
+        </div>
+        <div class="alert alert-warn" style="margin-top:.75rem">
+          ⚠️ <strong>Anti-hallucination:</strong> Temperature is set to 0.1. The prompt uses explicit zero-hallucination
+          directives. Output is validated against source segment count and tag presence. Always perform a human review
+          before using translations in production.
+        </div>
       </div>
-    </div>
 
-  </div><!-- /view-admin -->
+    </div><!-- /view-admin -->
 
-</main>
+  </main>
 
-<!-- ════════════════════════════════════════
+  <!-- ════════════════════════════════════════
      ADMIN AUTH MODAL
 ════════════════════════════════════════ -->
-<div class="modal-overlay" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
-  <div class="modal">
-    <div class="modal-title" id="admin-modal-title">🔐 Admin Access</div>
-    <div class="modal-desc">Enter the admin password to access advanced settings.</div>
-    <div class="form-group">
-      <label class="form-label" for="admin-pwd">Password</label>
-      <input type="password" class="form-control" id="admin-pwd" placeholder="Enter password" aria-label="Admin password"/>
-      <span style="color:var(--danger);font-size:.8rem;min-height:1.2em;display:block;margin-top:.25rem" id="admin-pwd-error"></span>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-secondary" id="admin-cancel">Cancel</button>
-      <button class="btn btn-primary" id="admin-confirm">Unlock</button>
+  <div class="modal-overlay" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal">
+      <div class="modal-title" id="admin-modal-title">🔐 Admin Access</div>
+      <div class="modal-desc">Enter the admin password to access advanced settings.</div>
+      <div class="form-group">
+        <label class="form-label" for="admin-pwd">Password</label>
+        <input type="password" class="form-control" id="admin-pwd" placeholder="Enter password"
+          aria-label="Admin password" />
+        <span style="color:var(--danger);font-size:.8rem;min-height:1.2em;display:block;margin-top:.25rem"
+          id="admin-pwd-error"></span>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-secondary" id="admin-cancel">Cancel</button>
+        <button class="btn btn-primary" id="admin-confirm">Unlock</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="app.js"></script>
-<script>
-  // Auto-show segment table after file load
-  const _origHandle = handleFile;
-  const _origHandleFile = handleFile;
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
 
-  // Show segments section after upload
-  document.addEventListener('DOMContentLoaded', () => {
-    const origHandleFile = window.handleFile;
-    // Patch: reveal segment section after parse
-    const fileInput = document.getElementById('file-input');
-    const zone = document.getElementById('upload-zone');
-
-    function afterFileLoad() {
-      document.getElementById('section-segments').style.display = 'block';
-      document.getElementById('translate-status').className = 'status-badge running';
-      document.getElementById('translate-status').innerHTML = '▶ Ready to translate';
-    }
-
-    // Observe file-info becoming visible as proxy for load success
-    const observer = new MutationObserver(() => {
+      /* ── 1. Reveal segment table + ready badge after file load ── */
       const fi = document.getElementById('file-info');
-      if (fi && fi.classList.contains('visible')) {
-        afterFileLoad();
+      if (fi) {
+        new MutationObserver(() => {
+          if (fi.classList.contains('visible')) {
+            document.getElementById('section-segments').style.display = 'block';
+            const badge = document.getElementById('translate-status');
+            badge.className = 'status-badge running';
+            badge.innerHTML = '<span style="display:inline-block;width:7px;height:7px;background:var(--accent);border-radius:50%;margin-right:5px;animation:pulse-glow 1.5s ease-in-out infinite"></span> Ready to translate';
+            // Pulse the translate button to draw attention
+            const tBtn = document.getElementById('translate-btn');
+            if (tBtn) {
+              tBtn.style.animation = 'none';
+              setTimeout(() => {
+                tBtn.style.boxShadow = '0 0 32px rgba(100,115,255,.6)';
+                setTimeout(() => tBtn.style.boxShadow = '', 1800);
+              }, 600);
+            }
+          }
+        }).observe(fi, { attributes: true, attributeFilter: ['class'] });
+      }
+
+      /* ── 2. Scroll-based active card highlight & step progress ── */
+      const sectionStepMap = [
+        ['section-upload', 0],
+        ['section-language', 1],
+        ['section-domain', 2],
+        ['section-model', 3],
+        ['section-apikey', 4],
+        ['section-instructions', 5],
+        ['section-prompt', 6],
+        ['section-translate', 7],
+      ];
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const pair = sectionStepMap.find(([id]) => id === entry.target.id);
+          if (!pair) return;
+          const [, stepIdx] = pair;
+          if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
+            // Highlight active card
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active-card'));
+            entry.target.classList.add('active-card');
+            // Update step bar if not already past the step
+            const items = document.querySelectorAll('.step-item');
+            items.forEach((item, i) => {
+              item.classList.remove('active');
+              if (i < stepIdx) item.classList.add('completed');
+              else if (i === stepIdx) item.classList.add('active');
+            });
+          }
+        });
+      }, { threshold: 0.35 });
+
+      sectionStepMap.forEach(([id]) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+
+      /* ── 3. Typed-text effect for prompt preview ── */
+      const origGeneratePrompt = window.generatePrompt;
+      window.generatePrompt = function () {
+        origGeneratePrompt();
+        // After prompt is set, apply a fast type-on effect
+        const pre = document.getElementById('prompt-text');
+        if (!pre || !pre.textContent || pre.textContent.length < 10) return;
+        const fullText = pre.textContent;
+        pre.textContent = '';
+        let i = 0;
+        const speed = Math.max(1, Math.floor(fullText.length / 300)); // chars per tick
+        const ticker = setInterval(() => {
+          i = Math.min(i + speed, fullText.length);
+          pre.textContent = fullText.slice(0, i);
+          pre.scrollTop = pre.scrollHeight;
+          if (i >= fullText.length) clearInterval(ticker);
+        }, 8);
+      };
+
+      /* ── 4. Translated row flash effect ── */
+      const origUpdateRow = UI.updateSegmentRow.bind(UI);
+      UI.updateSegmentRow = function (segId, target, status) {
+        origUpdateRow(segId, target, status);
+        if (status === 'done') {
+          const row = document.querySelector(`tr[data-seg-id="${segId}"]`);
+          if (row) {
+            row.classList.add('translated');
+            row.style.transition = 'background .4s';
+            row.style.background = 'rgba(52,211,153,.12)';
+            setTimeout(() => {
+              row.style.background = '';
+            }, 1200);
+          }
+        }
+      };
+
+      /* ── 5. Token stats count-up animation ── */
+      function animateCount(elId, target) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const duration = 700;
+        const start = Date.now();
+        const tick = () => {
+          const progress = Math.min((Date.now() - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(ease * target).toLocaleString();
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        tick();
+      }
+
+      const origEstimate = window.estimateTokens;
+      window.estimateTokens = async function () {
+        await origEstimate();
+        // Animate the token numbers
+        const inVal = parseInt(document.getElementById('token-input')?.textContent?.replace(/,/g, '')) || 0;
+        const outVal = parseInt(document.getElementById('token-output')?.textContent?.replace(/,/g, '')) || 0;
+        const totVal = parseInt(document.getElementById('token-total')?.textContent?.replace(/,/g, '')) || 0;
+        animateCount('token-input', inVal);
+        animateCount('token-output', outVal);
+        animateCount('token-total', totVal);
+      };
+
+      /* ── 6. Smooth progress-bar gradient animation ── */
+      const fill = document.getElementById('progress-fill');
+      if (fill) {
+        let pos = 0;
+        setInterval(() => {
+          pos = (pos + 0.5) % 200;
+          fill.style.backgroundPosition = `${pos}% center`;
+        }, 30);
       }
     });
-    const fi = document.getElementById('file-info');
-    if (fi) observer.observe(fi, { attributes: true, attributeFilter: ['class'] });
-  });
-</script>
+  </script>
 </body>
+
 </html>
