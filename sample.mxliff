@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:m="http://www.memsource.com">
+  <file original="sample_document.docx" source-language="en" target-language="ja" datatype="x-doc" m:segmentation="default">
+    <header>
+      <tool tool-id="Memsource" tool-name="Memsource" tool-version="9.320.13" tool-company="Memsource"/>
+    </header>
+    <body>
+      <trans-unit id="1" m:gross="1" m:score="0">
+        <source>Welcome to our <g id="1">company portal</g>. Please review the terms and conditions carefully.</source>
+        <target/>
+        <note>Marketing greeting</note>
+      </trans-unit>
+      <trans-unit id="2" m:gross="1" m:score="0">
+        <source>The contract will be effective as of <x id="1" equiv-text="[DATE]"/> and shall remain in force for a period of <x id="2" equiv-text="[DURATION]"/>.</source>
+        <target/>
+        <note>Legal clause</note>
+      </trans-unit>
+      <trans-unit id="3" m:gross="1" m:score="0">
+        <source>Please contact <g id="1"><g id="2">our support team</g></g> at your earliest convenience.</source>
+        <target/>
+        <note>Customer service</note>
+      </trans-unit>
+      <trans-unit id="4" m:gross="1" m:score="0">
+        <source>Total invoice amount: <ph id="1" equiv-text="{amount}"/>. Payment due within 30 days.</source>
+        <target/>
+        <note>Finance</note>
+      </trans-unit>
+      <trans-unit id="5" m:gross="1" m:score="0">
+        <source>The system will automatically <bx id="1" rid="1"/>restart<ex id="1" rid="1"/> after the update is complete.</source>
+        <target/>
+        <note>Technical</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
